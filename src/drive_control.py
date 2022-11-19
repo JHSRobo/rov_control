@@ -9,7 +9,7 @@ from std_msgs.msg import UInt8  # For camera  pub
 from std_msgs.msg import Bool
 from math import copysign
 from copilot_interface.msg import controlData
-from rov_control_interface.msg import thrusterPercents
+from rov_control.msg import thrusterPercents
 
 rospy.init_node("drive_control")
 
