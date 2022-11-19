@@ -33,7 +33,6 @@ def dhStateCallback(data):
     dhMostRecentDepth = data.pose.pose.position.z * -1
     depth = Float64()
     depth.data = dhMostRecentDepth
-    dh_setpoint_pub.publish(depth)
   
 def dhControlEffortCallback(data): # no need for dhEnable check since PIDs won't publish control effort when disabled
   global dh_eff
@@ -46,7 +45,6 @@ def change_depth_callback(depth):
   rospy.loginfo("depth recieved")  
   if thrustEN and dhEnable:
     currentDepth = abs((depth.data - 198.3) / (893.04 / 149))
-    test_pub.publish(currentDepth)
   
 def main():
   global thruster_status_sub, depth_hold_sub, dh_state_sub, dh_ctrl_eff_sub, dh_toggle_sub, depth_sub, test_pub
