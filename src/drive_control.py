@@ -9,7 +9,7 @@ from std_msgs.msg import UInt8  # For camera  pub
 from std_msgs.msg import Bool
 from math import copysign
 from copilot_interface.msg import controlData
-from rov_control_interface.msg import thrusterPercents
+from rov_control.msg import thrusterPercents
 
 rospy.init_node("drive_control")
 
@@ -68,12 +68,12 @@ def translate_vectors(vector):
   # Load up the thruster_vals message with our calculated values
   thruster_vals = thrusterPercents() # The amount we multiply each value by is just what we had in the original code. Subject to change
 
-  thruster_vals.t1 = T[1] * 1000
-  thruster_vals.t2 = T[2] * 1000
-  thruster_vals.t3 = T[3] * 1000
-  thruster_vals.t4 = T[4] * 1000
-  thruster_vals.t5 = T[5] * 1000
-  thruster_vals.t6 = T[6] * 1000
+  thruster_vals.t1 = (int)(T[1] * 1000)
+  thruster_vals.t2 = (int)(T[2] * 1000)
+  thruster_vals.t3 = (int)(T[3] * 1000)
+  thruster_vals.t4 = (int)(T[4] * 1000)
+  thruster_vals.t5 = (int)(T[5] * 1000)
+  thruster_vals.t6 = (int)(T[6] * 1000)
   
   return thruster_vals
 
