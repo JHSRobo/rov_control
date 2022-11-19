@@ -51,7 +51,6 @@ def change_depth_callback(depth):
 def main():
   global thruster_status_sub, depth_hold_sub, dh_state_sub, dh_ctrl_eff_sub, dh_toggle_sub, depth_sub, test_pub
   
-  test_pub = rospy.Publisher('/rov/thruster_testing', Int32, queue_size=1)
   #depth_hold_sub = rospy.Subscriber('depth_hold/pid_enable', PID, depthHoldCallback)
   #dh_ctrl_eff_sub = rospy.Subscriber('depth_hold/control_effort', Float64, dhControlEffortCallback)
   #dh_toggle_sub = rospy.Subscriber('depth_hold/pid_enable', Bool, dhToggleCallback)
