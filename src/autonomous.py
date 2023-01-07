@@ -69,7 +69,7 @@ def dhControlEffortCallback(data): # no need for dhEnable check since PIDs won't
   dh_eff = data.data
   
 def change_depth_callback(depth):
-  global dhEnable, thrustEN, targetDepth
+  global dhEnable, thrustEN, targetDepth, test_pub
  
   if thrustEN and dhEnable:
     # calibration of pressure sensor
@@ -87,7 +87,8 @@ def main():
   depth_sub = rospy.Subscriber('rov/depth_sensor', Float32, change_depth_callback)
   control_status_sub = rospy.Subscriber('control', controlData, rovDataCallback)
   
-  server = Server(copilotControlParamsConfig, controlCallback)
+  # creates another gui, use different one for possible depth hold gui or just delete
+  #server = Server(copilotControlParamsConfig, controlCallback)
   
   rospy.spin()
 
