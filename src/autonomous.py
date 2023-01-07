@@ -24,16 +24,16 @@ thrustEN = False
 dhEnable = False
 targetDepth = 0.0
 
-def controlCallback(config, level):
-  global thrustEN, dhEnable, p_scalar, i_scalar, d_scalar
+#def controlCallback(config, level):
+  #global thrustEN, dhEnable, p_scalar, i_scalar, d_scalar
   
-  thrustEN = config.thrusters
-  p_scalar = config.p_scalar
-  i_scalar = config.i_scalar
-  d_scalar = config.d_scalar
-  dhEnable = config.dh_enable
+  #thrustEN = config.thrusters
+  #p_scalar = config.p_scalar
+  #i_scalar = config.i_scalar
+  #d_scalar = config.d_scalar
+  #dhEnable = config.dh_enable
   
-  return config
+  #return config
 
 def ROS_INFO_STREAM(thrustEN):
   pass
@@ -78,7 +78,7 @@ def change_depth_callback(depth):
     rospy.loginfo(currentDepth)
   
 def main():
-  global thruster_status_sub, depth_hold_sub, dh_state_sub, dh_ctrl_eff_sub, dh_toggle_sub, depth_sub, test_pub
+  global thruster_status_sub, depth_hold_sub, dh_state_sub, dh_ctrl_eff_sub, dh_toggle_sub, depth_sub, test_pub, control_status_sub
   
   test_pub = rospy.Publisher('/rov/thruster_testing', Int32, queue_size=1)
   #depth_hold_sub = rospy.Subscriber('depth_hold/pid_enable', PID, depthHoldCallback)
