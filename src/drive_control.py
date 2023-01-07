@@ -114,7 +114,7 @@ def throttle_callback(joy):
   global thrustEN, joy_vector, sensitivity, dhEnable
 
   # check if thrusters disabled
-  if thrustEN and dhEnable:
+  if thrustEN and not dhEnable:
     v_axis = joy.axes[2] * sensitivity['vertical'] * -1
 
     v_axis = expDrive(v_axis)
