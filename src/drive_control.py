@@ -15,7 +15,8 @@ rospy.init_node("drive_control")
 
 sensitivity = {"linear": 0.5, "angular": 0.25, "vertical": 0.5} # Holds a percent multiplier for ROV sensitivity
 
-thrustEN = False  # thrusters enabled (True = yes, False = default = no
+thrustEN = False  # thrusters enabled (True = yes, False = default = no)
+dhEnable = False  # depth hold enabled (True = yes, False = default = no)
 
 #The vector that gets edited by the callbacks and then published
 joy_vector = Twist()
@@ -110,10 +111,10 @@ def joystick_callback(joy):
 
 # Callback that runs whenever the throttle sends an update
 def throttle_callback(joy):
-  global thrustEN, joy_vector, sensitivity
+  global thrustEN, joy_vector, sensitivity, dhEnable
 
   # check if thrusters disabled
-  if thrustEN:
+  if thrustEN and dhEnable:
     v_axis = joy.axes[2] * sensitivity['vertical'] * -1
 
     v_axis = expDrive(v_axis)
@@ -130,9 +131,10 @@ def throttle_callback(joy):
 # Handles copilot input: updates thrusters, edits sensitivity
 # Callback to anything published by the dynamic reconfigure copilot page
 def control_callback(control):
-  global thrustEN, sensitivity
+  global thrustEN, sensitivity, dhEnable
   
   thrustEN = control.thruster_status
+  dhEnable = control.dh_status
   sensitivity['linear'] = control.linear_sense
   sensitivity['angular'] = control.angular_sense
   sensitivity['vertical'] = control.vertical_sense
@@ -140,7 +142,7 @@ def control_callback(control):
   return control
 
 if __name__  == "__main__":
-    global horizJoySub, vertJoySub, velPub, camera_select
+    global horiz_joy_sub, vert_joy_sub, control_sub, vel_pub
     horiz_joy_sub = rospy.Subscriber('joystick', Joy, joystick_callback)
     vert_joy_sub = rospy.Subscriber('throttle', Joy, throttle_callback)
     control_sub = rospy.Subscriber('control', controlData, control_callback)
