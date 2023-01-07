@@ -11,21 +11,49 @@ from std_msgs.msg import Float64  # For pids
 from std_msgs.msg import Float32
 from std_msgs.msg import Int32
 from nav_msgs.msg import Odometry
+from copilot_interface.msg import controlData # control custom message
+
 from math import copysign
+from dynamic_reconfigure.server import Server
+from copilot_interface.cfg import copilotControlParamsConfig
 
 rospy.init_node("autonomous_control")
 
+# defaults for variables
 thrustEN = False
 dhEnable = False
+targetDepth = 0.0
 
-def controlCallback(control):
-  global dhEnable, thrustEN
+#def controlCallback(config, level):
+  #global thrustEN, dhEnable, p_scalar, i_scalar, d_scalar
   
-  thrustEN = control.thruster_status
-  dhEnable = control.dh_status
+  #thrustEN = config.thrusters
+  #p_scalar = config.p_scalar
+  #i_scalar = config.i_scalar
+  #d_scalar = config.d_scalar
+  #dhEnable = config.dh_enable
+  
+  #return config
 
-  return config
-  
+def ROS_INFO_STREAM(thrustEN):
+  pass
+
+# update variables with data from "/control" topic
+def rovDataCallback(data):
+  global thrustEN, dhEnable, targetDepth
+  thrustEN = data.thruster_status
+  ROS_INFO_STREAM(thrustEN)
+  dhEnable = data.dh_status
+  targetDepth = data.target_depth
+
+def depthHoldCallback(data):
+  global p_scalar, i_scalar, d_scalar
+    
+  p_scalar = data.p_scalar
+  i_scalar = data.i_scalar
+  d_scalar = data.d_scalar
+
+# ???
 def dhStateCallback(data):
   global dhMostRecentDepth
   
@@ -33,6 +61,7 @@ def dhStateCallback(data):
     dhMostRecentDepth = data.pose.pose.position.z * -1
     depth = Float64()
     depth.data = dhMostRecentDepth
+    dh_setpoint_pub.publish(depth)
   
 def dhControlEffortCallback(data): # no need for dhEnable check since PIDs won't publish control effort when disabled
   global dh_eff
@@ -40,19 +69,26 @@ def dhControlEffortCallback(data): # no need for dhEnable check since PIDs won't
   dh_eff = data.data
   
 def change_depth_callback(depth):
-  global dhEnable, thrustEN, test_pub
-
-  rospy.loginfo("depth recieved")  
+  global dhEnable, thrustEN, targetDepth, test_pub
+ 
   if thrustEN and dhEnable:
-    currentDepth = abs((depth.data - 198.3) / (893.04 / 149))
+    # calibration of pressure sensor
+    #currentDepth = abs((depth.data - 198.3) / (893.04 / 149))
+    currentDepth = abs(depth.data * 5)
+    rospy.loginfo(currentDepth)
   
 def main():
-  global thruster_status_sub, depth_hold_sub, dh_state_sub, dh_ctrl_eff_sub, dh_toggle_sub, depth_sub, test_pub
+  global thruster_status_sub, depth_hold_sub, dh_state_sub, dh_ctrl_eff_sub, dh_toggle_sub, depth_sub, test_pub, control_status_sub
   
+  test_pub = rospy.Publisher('/rov/thruster_testing', Int32, queue_size=1)
   #depth_hold_sub = rospy.Subscriber('depth_hold/pid_enable', PID, depthHoldCallback)
-  #dh_ctrl_eff_sub = rospy.Subscriber('depth_hold/control_effort', Float64, dhControlEffortCallback)
-  #dh_toggle_sub = rospy.Subscriber('depth_hold/pid_enable', Bool, dhToggleCallback)
-  #depth_sub = rospy.Subscriber('rov/depth_sensor', Float32, change_depth_callback)
+  #dh_state_sub = rospy.Subscriber('odometry/filtered', Odometry, dhStateCallback)
+  dh_ctrl_eff_sub = rospy.Subscriber('depth_hold/control_effort', Float64, dhControlEffortCallback)
+  depth_sub = rospy.Subscriber('rov/depth_sensor', Float32, change_depth_callback)
+  control_status_sub = rospy.Subscriber('control', controlData, rovDataCallback)
+  
+  # creates another gui, use different one for possible depth hold gui or just delete
+  #server = Server(copilotControlParamsConfig, controlCallback)
   
   rospy.spin()
 
