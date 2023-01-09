@@ -58,6 +58,7 @@
   <exec_depend>roscpp</exec_depend>
 
   <depend>copilot_interface</depend>
+  <depend>joy</depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
