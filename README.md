@@ -1,8 +1,8 @@
-# rov_control_interface
+# rov_control
 
 ## Description
 
-Edit the command vector from the joystick. Serve as the backup copilot page server, handle camera switching, and handle the tcu board. Manages features such as bilinear threshold, 4-way inversion, and joystick sensitivity.
+Receive joystick and throttle input and convert to vectors, then to thrust values.
 
 ## Flowchart:
 ![alt text](https://github.com/JHSRobo/rov_control/blob/main/rov_control_flowchart.png "ROV Control Flowchart")
