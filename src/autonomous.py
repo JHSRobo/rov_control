@@ -8,6 +8,7 @@ from sensor_msgs.msg import Joy
 from std_msgs.msg import UInt8  # For camera  pub
 from std_msgs.msg import Bool  # For TCU relay and solenoid controller pub and for pids
 from std_msgs.msg import Float64  # For pids
+from pid import PID
 from std_msgs.msg import Float32
 from std_msgs.msg import Int32
 from nav_msgs.msg import Odometry
