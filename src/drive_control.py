@@ -15,7 +15,8 @@ rospy.init_node("drive_control")
 
 sensitivity = {"linear": 0.5, "angular": 0.25, "vertical": 0.5} # Holds a percent multiplier for ROV sensitivity
 
-thrustEN = False  # thrusters enabled (True = yes, False = default = no
+thrustEN = False  # thrusters enabled (True = yes, False = default = no)
+dhEnable = False  # depth hold enabled (True = yes, False = default = no)
 
 #The vector that gets edited by the callbacks and then published
 joyVector = Twist()
@@ -106,11 +107,16 @@ def joyHorizontalCallback(joy):
     velPub.publish(joyVector)
 
 # Callback that runs whenever the throttle sends an update
+<<<<<<< HEAD
 def joyVerticalCallback(joy):
   global thrustEN, joyVector, sensitivity
+=======
+def throttle_callback(joy):
+  global thrustEN, joy_vector, sensitivity, dhEnable
+>>>>>>> b578a54aaa2564c63b3da76c991d9cf0dd2a6b03
 
   # check if thrusters disabled
-  if thrustEN:
+  if thrustEN and not dhEnable:
     v_axis = joy.axes[2] * sensitivity['vertical'] * -1
 
     v_axis = expDrive(v_axis)
@@ -122,9 +128,28 @@ def joyVerticalCallback(joy):
 
 # Handles copilot input: updates thrusters, edits sensitivity
 # Callback to anything published by the dynamic reconfigure copilot page
+<<<<<<< HEAD
 
 def controlCallback(config, level):
     global thrustEN, sensitivity
+=======
+def control_callback(control):
+  global thrustEN, sensitivity, dhEnable
+  
+  thrustEN = control.thruster_status
+  dhEnable = control.dh_status
+  sensitivity['linear'] = control.linear_sense
+  sensitivity['angular'] = control.angular_sense
+  sensitivity['vertical'] = control.vertical_sense
+
+  return control
+
+if __name__  == "__main__":
+    global horiz_joy_sub, vert_joy_sub, control_sub, vel_pub
+    horiz_joy_sub = rospy.Subscriber('joystick', Joy, joystick_callback)
+    vert_joy_sub = rospy.Subscriber('throttle', Joy, throttle_callback)
+    control_sub = rospy.Subscriber('control', controlData, control_callback)
+>>>>>>> b578a54aaa2564c63b3da76c991d9cf0dd2a6b03
     
     thrustEN = config.thrusters
     sensitivity['linear'] = config.l_scale
