@@ -76,7 +76,8 @@ def change_depth_callback(depth):
     # calibration of pressure sensor
     #currentDepth = abs((depth.data - 198.3) / (893.04 / 149))
     currentDepth = abs(depth.data * 5)
-    rospy.loginfo(currentDepth)
+    depthError = currentDepth - targetDepth
+    rospy.loginfo(depthError)
   
 def main():
   global thruster_status_sub, depth_hold_sub, dh_state_sub, dh_ctrl_eff_sub, dh_toggle_sub, depth_sub, test_pub, control_status_sub
