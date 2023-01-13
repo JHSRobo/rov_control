@@ -40,7 +40,7 @@ def autoDataCallback(data):
   d_scalar = data.d_scalar
   
   # Slightly redundant code but other variables should stay in case of future use
-  pid.setpoint(targetDepth)
+  pid.setpoint = targetDepth
   pid.tunings = (p_scalar, i_scalar, d_scalar)
   
 def change_depth_callback(depth):
