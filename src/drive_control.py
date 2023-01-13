@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-# author Adon Sharp | v0.2 | 1-15-2022
-# author Alex Bertran | v1.0 | 10-29-2022
-# author Alex Bertran | v1.1 | 1-12-2023
+# author Adon Sharp '24 | v0.2 | 1-15-2022
+# author Alex Bertran '24 | v1.0 | 10-29-2022
+# author Alex Bertran '24 | v1.1 | 1-12-2023
 
 import rospy
 from geometry_msgs.msg import Twist
