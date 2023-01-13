@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 # author Alex Bertran | v0.0 | 11-11-2022 | prototyping autonomous infrastructure
 # author Alex Bertran | v1.0 | 1-12-2023 | functional depth hold fully integrated
+#import sys
+#import os
+#sys.path.remove(os.path.dirname(__file__))
+
 import rospy
 from geometry_msgs.msg import Twist # may be necessary in the future, delete after 3/1/2023
 from simple_pid import PID  # For pids
 from std_msgs.msg import Float32  # For depth sensor
-from copilot_interface.msg import autoControlData # /auto_control custom message
+from copilot_interface.msg import autoControlData, controlData# /auto_control custom message
 
 rospy.init_node("autonomous_control")
 
