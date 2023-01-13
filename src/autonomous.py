@@ -44,7 +44,7 @@ def autoDataCallback(data):
   pid.tunings = (p_scalar, i_scalar, d_scalar)
   
 def change_depth_callback(depth):
-  global dhEnable, thrustEN, targetDepth, pid
+  global dhEnable, thrustEN, targetDepth, pid, pid_pub
  
   if thrustEN and dhEnable:
     # calibration of pressure sensor | REMEMBER TO KEEP UP TO DATE
@@ -54,7 +54,7 @@ def change_depth_callback(depth):
     pid_pub.publish(calculation)
   
 def main():
-  global depth_sub, control_status_sub, auto_control_status_sub
+  global depth_sub, control_status_sub, auto_control_status_sub, pid_pub
   
   depth_sub = rospy.Subscriber('rov/depth_sensor', Float32, change_depth_callback)
   control_status_sub = rospy.Subscriber('control', controlData, rovDataCallback)
