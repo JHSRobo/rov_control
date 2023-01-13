@@ -19,6 +19,7 @@ d_scalar = 0.05  # PID: derivative
 
 # Create new pid object with scalars and target point
 pid = PID(p_scalar, i_scalar, d_scalar, setpoint=targetDepth)
+pid.output_limits = (-10, 10)
 
 # update variables with data from "/control" topic
 def rovDataCallback(data):
@@ -34,8 +35,9 @@ def autoDataCallback(data):
   i_scalar = data.i_scalar
   d_scalar = data.d_scalar
   
-  # Slightly redundant code but targetDepth should stay in case of future use
+  # Slightly redundant code but other variables should stay in case of future use
   pid.setpoint(targetDepth)
+  pid.tunings = (p_scalar, i_scalar, d_scalar)
   
 def change_depth_callback(depth):
   global dhEnable, thrustEN, targetDepth, pid
