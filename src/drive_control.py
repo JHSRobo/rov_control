@@ -140,7 +140,7 @@ def control_callback(control):
   return control
 
 if __name__  == "__main__":
-    global horizJoySub, vertJoySub, velPub, camera_select
+    global horizJoySub, vertJoySub, vel_pub, camera_select
     horiz_joy_sub = rospy.Subscriber('joystick', Joy, joystick_callback)
     vert_joy_sub = rospy.Subscriber('throttle', Joy, throttle_callback)
     control_sub = rospy.Subscriber('control', controlData, control_callback)
