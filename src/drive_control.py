@@ -163,4 +163,4 @@ if __name__  == "__main__":
   vel_pub = rospy.Publisher('thrusters', thrusterPercents, queue_size=1)
 
     # Enter the event loop
-    rospy.spin()
+  rospy.spin()
