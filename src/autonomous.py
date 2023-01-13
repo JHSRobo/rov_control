@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# author Alex Bertran | v0.0 | 11-11-2022 | prototyping autonomous infrastructure
-# author Alex Bertran | v1.0 | 1-12-2023 | functional depth hold fully integrated
+# author Alex Bertran '24 | v0.0 | 11-11-2022 | prototyping autonomous infrastructure
+# author Alex Bertran '24 | v1.0 | 1-12-2023 | functional depth hold fully integrated
 #import sys
 #import os
 #sys.path.remove(os.path.dirname(__file__))
