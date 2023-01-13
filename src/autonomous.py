@@ -24,6 +24,7 @@ rospy.init_node("autonomous_control")
 thrustEN = False
 dhEnable = False
 targetDepth = 0.0
+pid = PID(1, 0.1, 0.05, setpoint=1)
 
 #def controlCallback(config, level):
   #global thrustEN, dhEnable, p_scalar, i_scalar, d_scalar
@@ -70,14 +71,15 @@ def dhControlEffortCallback(data): # no need for dhEnable check since PIDs won't
   dh_eff = data.data
   
 def change_depth_callback(depth):
-  global dhEnable, thrustEN, targetDepth, test_pub
+  global dhEnable, thrustEN, targetDepth, test_pub, pid
  
   if thrustEN and dhEnable:
     # calibration of pressure sensor
     #currentDepth = abs((depth.data - 198.3) / (893.04 / 149))
     currentDepth = abs(depth.data * 5)
     depthError = currentDepth - targetDepth
-    rospy.loginfo(depthError)
+    calculation = pid(depthError)
+    rospy.loginfo(calculation)
   
 def main():
   global thruster_status_sub, depth_hold_sub, dh_state_sub, dh_ctrl_eff_sub, dh_toggle_sub, depth_sub, test_pub, control_status_sub
