@@ -47,7 +47,7 @@ def change_depth_callback(depth):
     #currentDepth = abs((depth.data - 198.3) / (893.04 / 149))
     currentDepth = abs(depth.data * 5)
     calculation = pid(currentDepth)
-    rospy.loginfo(calculation)
+    pid_pub.publish(calculation)
   
 def main():
   global depth_sub, control_status_sub, auto_control_status_sub
@@ -55,6 +55,9 @@ def main():
   depth_sub = rospy.Subscriber('rov/depth_sensor', Float32, change_depth_callback)
   control_status_sub = rospy.Subscriber('control', controlData, rovDataCallback)
   auto_control_status_sub = rospy.Subscriber('auto_control', autoControlData, autoDataCallback)
+  
+  # Depth hold PID value publisher
+  pid_pub = rospy.Publisher('pid_effort', Float32, queue_size=1)
   
   rospy.spin()
 
