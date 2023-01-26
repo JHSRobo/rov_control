@@ -86,16 +86,23 @@ def joystick_callback(joy):
 
   # If thrusters enabled, map the joystick inputs to the joy_vector
   if thrustEN:
+
     # Multiply LR axis by -1 in base position (front-front, etc.)to make right positive
     # NOTE: right and rotate right are negative on the joystick's LR axis
     l_axisLR = joy.axes[0] * sensitivity['linear'] * -1
     l_axisFB = joy.axes[1] * sensitivity['linear']
-    a_axis = joy.axes[2] * sensitivity['angular'] * -1 
+    a_axis = joy.axes[2] * sensitivity['angular'] * -1
 
     # Apply the exponential ratio on all axis
     a_axis = expDrive(a_axis)
     l_axisLR = expDrive(l_axisLR)
     l_axisFB = expDrive(l_axisFB)
+
+    # If trigger is pressed, lower sensitivity
+    if joy.buttons[0]:
+      a_axis *= 0.5
+      l_axisLR *= 0.5
+      l_axisFB *= 0.5
 
   else:
     a_axis = 0
@@ -107,7 +114,7 @@ def joystick_callback(joy):
   joy_vector.linear.y = l_axisFB
   joy_vector.angular.x = a_axis
 
-  # Translate to thrusterPercents msg and publish
+  # Translate to thrusterPercents msg and publishC
   thrust_percents = translate_vectors(joy_vector)
   vel_pub.publish(thrust_percents)
 
