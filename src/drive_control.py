@@ -36,10 +36,10 @@ def expDrive(axis):
   # angularX is the rotational joystick axis
 def translate_vectors(vector):
   # Read twist values into variables
-  linearX = vector.linear.x
+  linearX = vector.angular.x
   linearY = vector.linear.y
   linearZ = vector.linear.z
-  angularX = vector.angular.x
+  angularX = vector.linear.x
 
   #Check to make sure values are appropriate
   if abs(linearX) > 1 or abs(linearY) > 1 or abs(linearZ) > 1 or abs(angularX) > 1: # The values for max are subject to change

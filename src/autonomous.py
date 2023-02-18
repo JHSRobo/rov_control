@@ -49,7 +49,7 @@ def change_depth_callback(depth):
   if thrustEN and dhEnable:
     # calibration of pressure sensor | REMEMBER TO KEEP UP TO DATE
     #currentDepth = abs((depth.data - 198.3) / (893.04 / 149))
-    currentDepth = abs(depth.data * 5)
+    currentDepth = abs((depth.data + 1.94) * 3.281) # Convert to feet and calibrate
     calculation = pid(currentDepth)
     pid_pub.publish(calculation)
   
