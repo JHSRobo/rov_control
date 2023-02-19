@@ -36,10 +36,14 @@ def expDrive(axis):
   # angularX is the rotational joystick axis
 def translate_vectors(vector):
   # Read twist values into variables
-  linearX = vector.angular.x
+  linearX = vector.linear.x
   linearY = vector.linear.y
   linearZ = vector.linear.z
-  angularX = vector.linear.x
+  angularX = vector.angular.x
+
+  rospy.logwarn(f'linearX: {linearX}')
+  rospy.logwarn(f'linearY: {linearY}')
+  rospy.logwarn(f'angularX: {angularX}')
 
   #Check to make sure values are appropriate
   if abs(linearX) > 1 or abs(linearY) > 1 or abs(linearZ) > 1 or abs(angularX) > 1: # The values for max are subject to change
@@ -50,14 +54,12 @@ def translate_vectors(vector):
   # TOTALLY SUBJECT TO CHANGE IN EVENT OF THRUSTER REARRANGEMENT
   # T is the name of the dictionary where we store our temp thruster vals. This is a dict and not a list so we can start at index 1.
   # This is advantageous because it means T[1] lines up with Thruster #1 on the ROV.
-  T = { 1 : linearX + linearY + angularX, 2 : -linearX + linearY - angularX, 3 : -linearX - linearY + angularX,
-        4 : linearX - linearY - angularX, 5 : linearZ, 6 : linearZ }
-  T[1] = linearX + linearY + angularX
-  T[2] = -linearX + linearY - angularX
-  T[3] = -linearX - linearY + angularX
-  T[4] = linearX - linearY - angularX
-  T[5] = linearZ
-  T[6] = linearZ
+  T = { 1 : linearX + linearY + angularX, 
+        2 : -linearX + linearY - angularX, 
+        3 : linearX - linearY - angularX,
+        4 : -linearX - linearY + angularX, 
+        5 : linearZ,
+        6 : linearZ }
   
   # Do a little math to normalize the values
   max_motor = max(abs(T[1]), abs(T[2]), abs(T[3]), abs(T[4]), abs(T[5]), abs(T[6]))
@@ -114,7 +116,7 @@ def joystick_callback(joy):
   joy_vector.linear.y = l_axisFB
   joy_vector.angular.x = a_axis
 
-  # Translate to thrusterPercents msg and publishC
+  # Translate to thrusterPercents msg and publish
   thrust_percents = translate_vectors(joy_vector)
   vel_pub.publish(thrust_percents)
 
