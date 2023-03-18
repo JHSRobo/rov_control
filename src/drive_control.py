@@ -39,6 +39,10 @@ def translate_vectors(vector):
   linearZ = vector.linear.z
   angularX = vector.angular.x
 
+  rospy.logwarn(f'linearX: {linearX}')
+  rospy.logwarn(f'linearY: {linearY}')
+  rospy.logwarn(f'angularX: {angularX}')
+
   #Check to make sure values are appropriate
   if abs(linearX) > 1 or abs(linearY) > 1 or abs(linearZ) > 1 or abs(angularX) > 1: # The values for max are subject to change
     rospy.logerr("Vectors outside of range")
