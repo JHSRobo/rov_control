@@ -8,9 +8,7 @@ from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Joy
 from std_msgs.msg import Float32 # for depth hold
 from math import copysign
-from copilot_interface.msg import controlData
-from copilot_interface.msg import autoControlData
-from rov_control.msg import thrusterPercents
+from launch_files.msg import controlData, autoControlData, thrusterPercents
 
 rospy.init_node("drive_control")
 
