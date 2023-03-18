@@ -9,7 +9,7 @@ import rospy
 from geometry_msgs.msg import Twist # may be necessary in the future, delete after 3/1/2023
 from simple_pid import PID  # For pids
 from std_msgs.msg import Float32  # For depth sensor
-from launch_files.msg import autoControlData, controlData
+from copilot_interface.msg import autoControlData, controlData# /auto_control custom message
 
 rospy.init_node("autonomous_control")
 
