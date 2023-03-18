@@ -9,7 +9,7 @@ Receive joystick and throttle input and convert to vectors, then to thrust value
 
 ## Contributors
 
-* Current maintainers: Alex Bertran, James Randall
+* Current maintainers: Alex Bertran, James Randall, Nathan Peterson
 
 * Contributors:
   * Michael Equi '19 - Initial work
