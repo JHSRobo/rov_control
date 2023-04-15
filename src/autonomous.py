@@ -54,7 +54,12 @@ def change_depth_callback(depth):
     currentDepth = abs((depth.data + 1.94) * 3.281) # Convert to feet and calibrate
     calculation = dh_pid(currentDepth)
     dh_pid_pub.publish(calculation)
+
+def autoDockCallback(data):
+  global thrustEN
   
+  
+
 def main():
   global depth_sub, control_status_sub, auto_control_status_sub, auto_dock_sub, dh_pid_pub
   
