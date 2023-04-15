@@ -1,3 +1,3 @@
-int ad_x_error
-int ad_y_error
-int ad_proximity
+int32 ad_x_error
+int32 ad_y_error
+int32 ad_proximity
