@@ -51,7 +51,7 @@ def change_depth_callback(depth):
   if thrustEN and dhEnable:
     # calibration of pressure sensor | REMEMBER TO KEEP UP TO DATE
     #currentDepth = abs((depth.data - 198.3) / (893.04 / 149))
-    currentDepth = abs((depth.data + 1.94) * 3.281) # Convert to feet and calibrate
+    currentDepth = abs(depth.data * 3.281) # Convert to feet and calibrate
     calculation = dh_pid(currentDepth)
     dh_pid_pub.publish(calculation)
 
@@ -69,7 +69,7 @@ def main():
   auto_dock_sub = rospy.Subscriber('auto_dock_data', autoDock, autoDockCallback)
   
   # Depth hold PID value publisher
-  dh_pid_pub = rospy.Publisher('pid_effort', Float32, queue_size=1)
+  dh_pid_pub = rospy.Publisher('dh_pid_effort', Float32, queue_size=1)
   
   rospy.spin()
 

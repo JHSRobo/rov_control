@@ -163,7 +163,7 @@ if __name__  == "__main__":
   vert_joy_sub = rospy.Subscriber('throttle', Joy, throttle_callback)
   control_sub = rospy.Subscriber('control', controlData, control_callback)
   auto_control_sub = rospy.Subscriber('auto_control', autoControlData, auto_control_callback)
-  depth_hold_sub = rospy.Subscriber('pid_effort', Float32, depth_hold_callback)
+  depth_hold_sub = rospy.Subscriber('dh_pid_effort', Float32, depth_hold_callback)
 
   vel_pub = rospy.Publisher('thrusters', thrusterPercents, queue_size=1)
 
