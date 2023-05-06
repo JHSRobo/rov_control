@@ -55,6 +55,7 @@ add_message_files(
         FILES
         thrusterPercents.msg
         autoDock.msg
+        autoDockPID.msg
 )
 
 ## Generate services in the 'srv' folder
