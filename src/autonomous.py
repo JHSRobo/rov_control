@@ -51,9 +51,8 @@ def throttle_callback(data):
   global currentDHEnable, currentDepth, targetDepth, dhEnable
   if data.buttons[1] == 1 and not dhEnable:
     if not currentDHEnable:
-      targetDepth = currentDepth
       pid.tunings = (p_scalar, i_scalar, d_scalar)
-      pid.setpoint = targetDepth
+      pid.setpoint = currentDepth
     currentDHEnable = True
   else:
     currentDHEnable = False
