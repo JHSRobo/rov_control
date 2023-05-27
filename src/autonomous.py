@@ -6,7 +6,7 @@
 #sys.path.remove(os.path.dirname(__file__))
 
 import rospy
-from geometry_msgs.msg import Twist # may be necessary in the future, delete after 3/1/2023
+from sensor_msgs.msg import Joy
 from simple_pid import PID  # For pids
 from std_msgs.msg import Float32  # For depth sensor
 from copilot_interface.msg import autoControlData, controlData# /auto_control custom message
@@ -14,8 +14,12 @@ from copilot_interface.msg import autoControlData, controlData# /auto_control cu
 rospy.init_node("autonomous_control")
 
 # defaults for variables
+currentDepth = -1
 thrustEN = False  # Thruster toggle status
 dhEnable = False  # Depth hold toggle status
+currentDHEnable = False  # Current depth hold toggle status
+# currentDHStatus = -1 # Status for current depth hold
+currentDHTarget = -1 # Target depth for current depth hold
 targetDepth = 7.5  # Target depth for depth hold
 p_scalar = 1.0  # PID: proportional
 i_scalar = 0.1  # PID: integral
@@ -42,14 +46,24 @@ def autoDataCallback(data):
   # Slightly redundant code but other variables should stay in case of future use
   pid.setpoint = targetDepth
   pid.tunings = (p_scalar, i_scalar, d_scalar)
-  
+
+def throttle_callback(data):
+  global currentDHEnable, currentDepth, targetDepth, dhEnable
+  if data.buttons[1] == 1 and not dhEnable:
+    if not currentDHEnable:
+      targetDepth = currentDepth
+      pid.tunings = (p_scalar, i_scalar, d_scalar)
+      pid.setpoint = targetDepth
+    currentDHEnable = True
+  else:
+    currentDHEnable = False
+
 def change_depth_callback(depth):
-  global dhEnable, thrustEN, targetDepth, pid, pid_pub
+  global dhEnable, thrustEN, targetDepth, pid, pid_pub, currentDepth
  
-  if thrustEN and dhEnable:
+  currentDepth = abs((depth.data * 3.281) + 1.94) # Convert to feet and calibrate
+  if thrustEN and (dhEnable or currentDHEnable):
     # calibration of pressure sensor | REMEMBER TO KEEP UP TO DATE
-    #currentDepth = abs((depth.data - 198.3) / (893.04 / 149))
-    currentDepth = abs((depth.data * 3.281) + 1.94) # Convert to feet and calibrate
     calculation = pid(currentDepth)
     pid_pub.publish(calculation)
   
@@ -59,6 +73,7 @@ def main():
   depth_sub = rospy.Subscriber('rov/depth_sensor', Float32, change_depth_callback)
   control_status_sub = rospy.Subscriber('control', controlData, rovDataCallback)
   auto_control_status_sub = rospy.Subscriber('auto_control', autoControlData, autoDataCallback)
+  vert_joy_sub = rospy.Subscriber('throttle', Joy, throttle_callback)
   
   # Depth hold PID value publisher
   pid_pub = rospy.Publisher('pid_effort', Float32, queue_size=1)
