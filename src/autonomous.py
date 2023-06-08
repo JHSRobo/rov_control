@@ -23,7 +23,7 @@ d_scalar = 0.05  # PID: derivative
 
 # Create new pid object with scalars and target point
 pid = PID(p_scalar, i_scalar, d_scalar, setpoint=targetDepth)
-pid.output_limits = (-10, 10)
+pid.output_limits = (-1000, 1000)
 
 # update variables with data from "/control" topic
 def rovDataCallback(data):

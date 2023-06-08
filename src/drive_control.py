@@ -123,7 +123,7 @@ def throttle_callback(joy):
   # check if thrusters disabled
   if thrustEN:
     if dhEnable:
-      v_axis = depthHoldThrust / 10
+      v_axis = depthHoldThrust / 1000
     
     else:
       v_axis = joy.axes[2] * sensitivity['vertical'] * -1
